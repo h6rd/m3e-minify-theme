@@ -38,9 +38,9 @@ jobs:
             cp "m3-${variant}.css" "$tmp/"
             cp "$preview" "$tmp/preview.png"
             sed -e "/m3-${other}\.css/d" \
-                -e "s/^# M3 Theme\$/# M3 Theme (${Variant})/" \
+                -e "s/^# M3E Theme\$/# M3E Theme (${Variant})/" \
                 notes.md > "$tmp/notes.md"
-            jq --arg n "M3 Theme (${Variant})" '.name = $n' manifest.json > "$tmp/manifest.json"
+            jq --arg n "M3E Theme (${Variant})" '.name = $n' manifest.json > "$tmp/manifest.json"
             (cd "$tmp" && zip -q "$GITHUB_WORKSPACE/dist/${repo}-${variant}.zip" ./*)
           done
 
