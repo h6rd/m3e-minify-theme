@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - "v*"
+      - "[0-9]+.[0-9]+.[0-9]+"
 
 permissions:
   contents: write
@@ -18,22 +18,11 @@ jobs:
         run: |
           set -euo pipefail
           repo="${{ github.event.repository.name }}"
-          ss=".github/ss"
           mkdir -p dist
 
           for variant in dark light; do
-            Variant="$(tr '[:lower:]' '[:upper:]' <<< "${variant:0:1}")${variant:1}"
-            if [ "$variant" = "dark" ]; then
-              preview="$ss/main-purple.png"
-            else
-              preview="$ss/main-purple-light.png"
-            fi
             tmp="$(mktemp -d)"
             cp "m3e-${variant}.css" "$tmp/"
-            cp "$preview" "$tmp/preview.png"
-            sed -e '/^- `m3e-.*\.css`/d' \
-                -e "s/^# M3E Theme\$/# M3E Theme (${Variant})/" \
-                notes.md | cat -s > "$tmp/notes.md"
             (cd "$tmp" && zip -q "$GITHUB_WORKSPACE/dist/${repo}-${variant}.zip" ./*)
           done
 
