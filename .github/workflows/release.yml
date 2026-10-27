@@ -1,0 +1,62 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build archives
+        run: |
+          set -euo pipefail
+          repo="${{ github.event.repository.name }}"
+          ss=".github/ss"
+          mkdir -p dist
+
+          tmp="$(mktemp -d)"
+          cp m3-dark.css m3-light.css manifest.json notes.md "$tmp/"
+          cp "$ss/main-purple.png" "$tmp/preview.png"
+          (cd "$tmp" && zip -q "$GITHUB_WORKSPACE/dist/${repo}.zip" ./*)
+
+          for variant in dark light; do
+            Variant="$(tr '[:lower:]' '[:upper:]' <<< "${variant:0:1}")${variant:1}"
+            if [ "$variant" = "dark" ]; then
+              preview="$ss/main-purple.png"
+            else
+              preview="$ss/main-purple-light.png"
+            fi
+            tmp="$(mktemp -d)"
+            if [ "$variant" = "dark" ]; then other="light"; else other="dark"; fi
+            cp "m3-${variant}.css" "$tmp/"
+            cp "$preview" "$tmp/preview.png"
+            sed -e "/m3-${other}\.css/d" \
+                -e "s/^# M3 Theme\$/# M3 Theme (${Variant})/" \
+                notes.md > "$tmp/notes.md"
+            jq --arg n "M3 Theme (${Variant})" '.name = $n' manifest.json > "$tmp/manifest.json"
+            (cd "$tmp" && zip -q "$GITHUB_WORKSPACE/dist/${repo}-${variant}.zip" ./*)
+          done
+
+          for f in dist/*.zip; do echo "== $f"; unzip -l "$f"; done
+          (cd dist && sha512sum ./*.zip) | sed 's#\./##' | tee checksums.txt
+          {
+            echo "### SHA-512"
+            echo '```'
+            cat checksums.txt
+            echo '```'
+          } > release-notes.md
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ github.ref_name }}" dist/*.zip \
+            --generate-notes \
+            --notes-file release-notes.md
