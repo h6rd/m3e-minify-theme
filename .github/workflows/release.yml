@@ -22,7 +22,7 @@ jobs:
           mkdir -p dist
 
           tmp="$(mktemp -d)"
-          cp m3-dark.css m3-light.css manifest.json notes.md "$tmp/"
+          cp m3e-dark.css m3e-light.css manifest.json notes.md "$tmp/"
           cp "$ss/main-purple.png" "$tmp/preview.png"
           (cd "$tmp" && zip -q "$GITHUB_WORKSPACE/dist/${repo}.zip" ./*)
 
@@ -35,9 +35,9 @@ jobs:
             fi
             tmp="$(mktemp -d)"
             if [ "$variant" = "dark" ]; then other="light"; else other="dark"; fi
-            cp "m3-${variant}.css" "$tmp/"
+            cp "m3e-${variant}.css" "$tmp/"
             cp "$preview" "$tmp/preview.png"
-            sed -e "/m3-${other}\.css/d" \
+            sed -e "/m3e-${other}\.css/d" \
                 -e "s/^# M3E Theme\$/# M3E Theme (${Variant})/" \
                 notes.md > "$tmp/notes.md"
             jq --arg n "M3E Theme (${Variant})" '.name = $n' manifest.json > "$tmp/manifest.json"
