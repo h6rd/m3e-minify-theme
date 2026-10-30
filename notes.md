@@ -6,8 +6,11 @@ Material 3 Expressive Theme
 
 ## Customization
 
-- Change `--md-source` at the beginning of the `.css` file to recolor the entire theme.
-- Set `--md-bg-shape-opacity: 0%` to turn off the background shapes (`14%` by default).
+Go to the `Minify/themes/` directory and open the `m3e-*.css` file:
+
+- Change `--md-source` to recolor the entire theme.
+- Set `--md-bg-anim: none;` to disable the rotation of background shapes.
+- Set `--md-bg-display: none;` to disable background shapes.
 
 <!-- lang:ru -->
 
@@ -17,5 +20,8 @@ Material 3 Expressive Theme
 
 ## Настройка
 
-- Измените `--md-source` в начале `.css`, чтобы перекрасить всю тему.
-- Поставьте `--md-bg-shape-opacity: 0%`, чтобы отключить фоновые шейпы (по умолчанию `14%`).
+Перейдите по пути `Minify/themes/` и откройте файл `m3e-*.css`:
+
+- Измените `--md-source`, чтобы перекрасить всю тему.
+- Поставьте `--md-bg-anim: none;`, чтобы отключить вращение фоновых шейпов.
+- Поставьте `--md-bg-display: none;`, чтобы отключить фоновые шейпы.

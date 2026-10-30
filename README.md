@@ -1,4 +1,4 @@
-# m3-minify-theme
+# m3e-minify-theme
 
 Material 3 Expressive themes for [Dota 2 Minify](https://github.com/egezenn/dota2-minify).
 
@@ -14,6 +14,8 @@ Material 3 Expressive themes for [Dota 2 Minify](https://github.com/egezenn/dota
 
 - `--md-source` — source color of the whole palette.
 - `--md-bg-shape-opacity` — background shapes opacity (`0%` disables them).
+- `--md-bg-anim: none;` — disable rotation of background shapes (default: md-spin).
+- `--md-bg-display: none;` — disable background shapes (default: block).
 
 ## Screenshots
 
